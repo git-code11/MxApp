@@ -23,21 +23,23 @@ export default function(){
         <Box>
             <BackHeader title="Create new password"/>
 
-            <Stack component={Container} 
-                    spacing={5}
-                    sx={{pt:12, pb:2, minHeight:"100vh", backgroundColor:"tertiary.main",".MuiSvgIcon-root":{color:"tertiary.contrastText"}}}>
-                
-                <Typography variant="h5">Change Account Password now</Typography>
+            <Box sx={{pt:12, pb:2, minHeight:"100vh", backgroundColor:"tertiary.main",".MuiSvgIcon-root":{color:"tertiary.contrastText"}}}>
+                <Stack component={Container} 
+                        spacing={5}
+                        >
+                    
+                    <Typography variant="h5">Change Account Password now</Typography>
 
-                <Stack spacing={3}>
-                    {fields.map(d=><Input name={d.name} label={d.label} icon={d.icon}/>)}
-                </Stack>
+                    <Stack spacing={3}>
+                        {fields.map(d=><Input name={d.name} label={d.label} icon={d.icon}/>)}
+                    </Stack>
+                    
+                    <Stack alignItems="center">
+                        <Button label="SAVE" path="/auth/log_in"/>
+                    </Stack>
                 
-                <Stack alignItems="center">
-                    <Button label="SAVE" path="/auth/log_in"/>
                 </Stack>
-            
-            </Stack>
+            </Box>
         </Box>
     );
 }

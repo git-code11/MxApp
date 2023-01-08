@@ -21,20 +21,22 @@ export default function(){
         <Box>
             <BackHeader title="Forget Password"/>
 
-            <Stack component={Container} 
-                    spacing={5}
-                    sx={{pt:12, pb:2, minHeight:"100vh", backgroundColor:"tertiary.main",".MuiSvgIcon-root":{color:"tertiary.contrastText"}}}>
-                
-                <Typography variant="h5" align="center" sx={{textDecoration:"underline"}}>Recover Account</Typography>
+            <Box sx={{pt:12, pb:2, minHeight:"100vh", backgroundColor:"tertiary.main",".MuiSvgIcon-root":{color:"tertiary.contrastText"}}}>
+                <Stack component={Container} 
+                        spacing={5}
+                        >
+                    
+                    <Typography variant="h5" align="center" sx={{textDecoration:"underline"}}>Recover Account</Typography>
 
-                <Stack spacing={4} alignItems="center">
-                    {fields.map(d=><Input name={d.name} label={d.label} icon={d.icon}/>)}
-                    <Button label="RECOVER" path="/auth/new_password"/>
+                    <Stack spacing={4} alignItems="center">
+                        {fields.map(d=><Input name={d.name} label={d.label} icon={d.icon}/>)}
+                        <Button label="RECOVER" path="/auth/new_password"/>
+                    </Stack>
+
+                    <Caption text1="Do you want a new account?" text2="Click here" href="/auth/log_in"/>
+                    
                 </Stack>
-
-                <Caption text1="Do you want a new account?" text2="Click here" href="/auth/log_in"/>
-                
-            </Stack>
+            </Box>
         </Box>
     );
 }

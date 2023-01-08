@@ -29,26 +29,27 @@ export default function(){
         <Box>
             <BackHeader/>
 
-            <Stack component={Container} 
-                    spacing={1}
-                    justifyContent="space-between"
-                    sx={{pt:9, pb:2, minHeight:"100vh", backgroundColor:"tertiary.main",".MuiSvgIcon-root":{color:"tertiary.contrastText"}}}>
-                
-                <Stack spacing={0.25} alignItems="center">
-                    <Typography variant="h5" fontWeight="bold">Let's Get Started!</Typography>
-                    <Typography variant="body2">Log in to your account and start swapping</Typography>
-                </Stack>
+            <Box sx={{pt:9, pb:2, minHeight:"100vh", backgroundColor:"tertiary.main",".MuiSvgIcon-root":{color:"tertiary.contrastText"}}}>
+                <Stack component={Container} 
+                        spacing={4}
+                        >
+                    
+                    <Stack spacing={0.25} alignItems="center">
+                        <Typography variant="h5" fontWeight="bold">Let's Get Started!</Typography>
+                        <Typography variant="body2">Log in to your account and start swapping</Typography>
+                    </Stack>
 
-                <Stack spacing={2}>
-                    {fields.map(d=><Input name={d.name} label={d.label} icon={d.icon}/>)}
-                </Stack>
+                    <Stack spacing={2}>
+                        {fields.map(d=><Input name={d.name} label={d.label} icon={d.icon}/>)}
+                    </Stack>
+                    
+                    <Stack alignItems="center">
+                        <Button label="CREATE"/>
+                    </Stack>
                 
-                <Stack alignItems="center">
-                    <Button label="CREATE"/>
+                    <Caption text1="Already have an account?" text2="Log In" href="/auth/log_in"/>
                 </Stack>
-            
-                <Caption text1="Already have an account?" text2="Log In" href="/auth/log_in"/>
-            </Stack>
+            </Box>
         </Box>
     );
 }

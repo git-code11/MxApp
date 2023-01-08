@@ -26,6 +26,7 @@ declare module '@mui/material/AppBar'{
 
 const theme = createTheme({
   palette: {
+    mode:"light",
     primary: {
       main: '#070e23'
     },
