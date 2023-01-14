@@ -2,7 +2,9 @@ import '../styles/globals.css'
 import { AppProps } from 'next/app';
 
 
-import {createTheme, ThemeProvider } from '@mui/material/styles';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import CssBaseline from "@mui/material/CssBaseline";
+import Box from "@mui/material/Box";
 
 declare module '@mui/material/styles'{
   interface Palette{
@@ -50,7 +52,10 @@ const theme = createTheme({
 export default function App({ Component, pageProps }: AppProps) {
   return(
     <ThemeProvider theme={theme}>
-      <Component {...pageProps} />
+      <Box>
+        <CssBaseline enableColorScheme/>
+        <Component {...pageProps} />
+      </Box>
     </ThemeProvider>
   );
 }
