@@ -49,11 +49,12 @@ const theme = createTheme({
   }
 });
 
+
 export default function App({ Component, pageProps }: AppProps) {
   return(
     <ThemeProvider theme={theme}>
-      <Box>
-        <CssBaseline enableColorScheme/>
+      <Box sx={{backgroundColor:"background.paper", color:"text.primary", minHeight:"100vh"}}>
+        <CssBaseline enableColorScheme={true}/>
         <Component {...pageProps} />
       </Box>
     </ThemeProvider>
