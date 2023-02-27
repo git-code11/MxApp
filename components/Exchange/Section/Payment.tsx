@@ -14,55 +14,100 @@ import UploadIcon from "@mui/icons-material/UploadFile";
 
 import PreviewIcon from "@mui/icons-material/PreviewTwoTone";
 
-import {ViewSectionProps} from "../Base";
 
-import TransactionStatus,{TransctionStatusProps} from "../../Transaction/Status";
+import TransactionStatus from "../../Transaction/Status";
 
-import TransactionDetails,{TransactionDetailsProps} from "../../Transaction/Details";
+import TransactionDetails from "../../Transaction/Details";
+
+import {useNext} from "./Provider";
+
+import FormProvider from "../../Form";
+import {UploadBtn} from "../../Form/ServiceForm";
 
 
+import {useDispatch} from "react-redux";
+import {addDebitProve} from "../../../redux/exchange";
+import { useCallback } from 'react';
 
-interface PaymentSectionProps extends ViewSectionProps{
-    transactionStatus:TransctionStatusProps,
-    transactionDetails:TransactionDetailsProps
+import {Preview} from "../../PreviewDocument";
+
+
+import {useSelector} from "react-redux";
+import { createSelector } from '@reduxjs/toolkit';
+
+
+const UploadForm = ()=>{
+    const dispatch = useDispatch();
+    const uploadAction = useCallback((e:any)=>{
+        dispatch(addDebitProve(e));
+    },[dispatch]);
+
+    return (
+        <FormProvider>
+            <Stack spacing={0.25}>
+                <Typography variant="caption" sx={(theme)=>({color:theme.palette.info.main})} fontWeight="bold">NOTE: Reciept to be uploaded clearly and </Typography>
+                <UploadBtn variant="contained" color="primary" startIcon={<UploadIcon fontSize="large"/>} 
+                                name="debitFile" label="Upload Payment Proof" showMetadata
+                                onValueChange = {uploadAction}
+                                />
+            </Stack>
+        </FormProvider>
+    );
 }
 
-export default (props:PaymentSectionProps)=>
+
+const _selector = createSelector((state:any)=>state.exchange.prove, (pv:any)=>(
+    [
+        {label:"Debit Doc", path:pv.debit}
+    ]
+));
+
+
+const PreviewButton = ()=>{
+    const documents = useSelector(_selector);
+
+    return (
+        (documents && documents?.[0]?.path?.length > 0)?
+            (<Preview sx={{py:2}} startIcon={<PreviewIcon/>} 
+                variant="contained" documents={documents}
+                color="info">Preview</Preview>):<div/>
+    )
+}
+
+
+const ActionButton = ()=>{
+    const next:any = useNext();
+
+    return (
+    <Stack direction="row" justifyContent="space-between">
+        <Button sx={{py:2}} startIcon={<ArrowBackIcon/>} variant="contained" color="primary">Cancel</Button>
+        <Button sx={{py:2}} endIcon={<ArrowForwardIcon/>} variant="contained" color="warning" onClick={next}>Proceed</Button>
+    </Stack>
+    );
+}
+
+
+export default ()=>{
+    
+   
+    
+    return(
     <Paper sx={{p:2}}>
         <Stack spacing={3}>
             <Typography fontStyle="italic">Make Payment to the right Account</Typography>
             
-            <TransactionStatus {...props.transactionStatus}/>
+            <TransactionStatus/>
 
-            <TransactionDetails {...props.transactionDetails}/>
+            <TransactionDetails/>
             
             <Stack spacing={0.25}>
-                <Typography variant="caption" sx={(theme)=>({color:theme.palette.info.main})} fontWeight="bold">NOTE: Reciept to be uploaded clearly and </Typography>
-                <Button sx={{py:2}} component="label" startIcon={<UploadIcon fontSize="large"/>} variant="contained" color="primary">
-                    Upload Payment Proof
-                    <input hidden accept="image/*" type="file"/>
-                </Button>
+                <UploadForm/>
+                <PreviewButton/>
             </Stack>
 
-            <Stack spacing={0.25}>
-                <Grid container>
-                    <Grid item xs={9}>
-                        <Typography noWrap>
-                            <b>FileName: </b>
-                            <u>sjjdwppppppdjssssssssj.jpg</u>
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                        <b>- 25kb</b>
-                    </Grid>
-                </Grid>
-                <Button sx={{py:2}} startIcon={<PreviewIcon/>} variant="contained" color="info" onClick={props.onPreview}>Preview</Button>
-            </Stack>
+            <ActionButton/>
 
-            <Stack direction="row" justifyContent="space-between">
-                <Button sx={{py:2}} startIcon={<ArrowBackIcon/>} variant="contained" color="primary">Cancel</Button>
-                <Button sx={{py:2}} endIcon={<ArrowForwardIcon/>} variant="contained" color="warning" onClick={props.onNext}>Proceed</Button>
-            </Stack>
         </Stack>
-    </Paper>
+    </Paper>)
+}
 ;

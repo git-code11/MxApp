@@ -7,4 +7,4 @@ const Link = ({href, children, sx}:{href?:string, children?:LinkProps["children"
     <MuiLink href={href??"#"} component={NextLink} sx={sx}>{children}</MuiLink>
 ;
 
-export {Link}
+export default Link;

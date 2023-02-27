@@ -14,20 +14,44 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import { ExpandMoreRounded } from "@mui/icons-material";
 
-import TransactionStatus,{TransctionStatusProps} from "../../Transaction/Status";
+import TransactionStatus from "../../Transaction/Status";
 
-import TransactionDetails,{TransactionDetailsProps} from "../../Transaction/Details";
-import { ViewSectionProps } from "../Base";
-
+import TransactionDetails from "../../Transaction/Details";
 
 
-interface ConfirmSectionProps extends ViewSectionProps{
-    transactionStatus:TransctionStatusProps,
-    transactionDetails:TransactionDetailsProps
+import {useNext} from "./Provider";
+import {Preview} from "../../PreviewDocument";
+import {useSelector} from "react-redux";
+import { createSelector } from '@reduxjs/toolkit';
+
+
+const _selector = createSelector((state:any)=>state.exchange.prove, (pv:any)=>(
+    [
+        {label:"Credit Doc", path:pv.credit}
+    ]
+));
+
+
+const PreviewButton = ()=>{
+    const documents = useSelector(_selector);
+
+    return (
+        <Preview sx={{py:2}} variant="contained" title="Payee Document" documents={documents} color="info">Preview</Preview>
+    );
+}
+
+const ActionButton = ()=>{
+    const next = useNext();
+
+    return (
+        <Button sx={{py:2}} variant="contained" color="success" onClick={next}>Complete Transaction</Button>
+    );
 }
 
 
-export default (props:ConfirmSectionProps)=>
+export default ()=>{
+
+    return (
     <Box>
         <Paper sx={{p:2}}>
             <Stack spacing={3}>
@@ -37,14 +61,14 @@ export default (props:ConfirmSectionProps)=>
                     <CircularProgress size={80} color="secondary"/>
                 </Stack>
 
-                <TransactionStatus  {...props.transactionStatus}/>
+                <TransactionStatus/>
                 
                 <Accordion>
                     <AccordionSummary expandIcon={<ExpandMoreRounded/>}>
                         <Typography variant="h6">Transaction Details</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
-                        <TransactionDetails  {...props.transactionDetails}/>
+                        <TransactionDetails/>
                     </AccordionDetails>
                 </Accordion>
 
@@ -53,10 +77,12 @@ export default (props:ConfirmSectionProps)=>
                         NOTE: Transaction is Processing<br/>
                         Transaction could also be monitored from transaction History
                     </Typography>
-                    <Button sx={{py:2}} variant="contained" color="info" onClick={props.onPreview}>Preview Document</Button>
-                    <Button sx={{py:2}} variant="contained" color="success" onClick={props.onNext}>Complete Transaction</Button>
+                    <PreviewButton/>
+                    <ActionButton/>
                 </Stack>
             </Stack>
         </Paper>
     </Box>
+    );
+}
 ;

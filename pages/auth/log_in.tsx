@@ -9,13 +9,47 @@ import Avatar from "@mui/material/Avatar";
 import UserIcon from "@mui/icons-material/Person";
 import PasswordIcon from "@mui/icons-material/LockOutlined";
 
-import {Input, Button, Caption} from "../../components/AuthFormInput";
-import {Link} from "../../components/Link";
+import Link from "../../components/Link";
+import Caption from "../../components/Link/Caption";
+import FormProvider  from "../../components/Form";
+import { InputAction, Input} from "../../components/Form/AuthForm";
+
+import * as yup from "yup";
+
+import * as regex_test from "../../components/input_test";
+
 
 const fields = [
-    {name:"user_name", label:"User Name", icon:<UserIcon/>},
-    {name:"password", label:"Password", icon:<PasswordIcon/>}
+    {name:"email", label:"Email", icon:<UserIcon/>},
+    {name:"password", label:"Password", icon:<PasswordIcon/>, type:"password"}
 ]
+
+
+const schema = yup.object({
+    email: yup.string().matches(regex_test.email, "email invalid").required(),
+    password:yup.string().min(4).required(),
+  }).required();
+
+  
+const LoginForm = ()=>{
+
+    const submit = console.log;
+
+    return (
+        <FormProvider schema={schema}>
+            <Stack spacing={2}>       
+                {fields.map(d=><Input key={d.name} {...d}/>)}
+                <Stack direction="row" justifyContent="end">
+                    <Typography component={Link} href="/auth/forget_password" align="right" sx={{textDecoration:"underline"}}>Forget Password?</Typography>
+                </Stack>
+                <Stack alignItems="center">
+                    <InputAction label="LOGIN" action={submit}/>
+                </Stack>
+            </Stack>
+        </FormProvider> 
+    );
+}
+
 
 export default function(){
     return(
@@ -27,21 +61,9 @@ export default function(){
                     <Typography variant="h5" fontWeight="bold">Welcome Back!</Typography>
                     <Typography variant="body2">Log in to your account and start swapping</Typography>
                 </Stack>
-
-                <Stack spacing={2}>
-                    
-                    {fields.map(d=><Input key={d.name} name={d.name} label={d.label} icon={d.icon}/>)}
-                    
-                    <Stack direction="row" justifyContent="end">
-                        <Typography component={Link} href="/auth/forget_password" align="right" sx={{textDecoration:"underline"}}>Forget Password?</Typography>
-                    </Stack>
-
-                </Stack>
                 
-                <Stack alignItems="center">
-                    <Button path="/home" label="LOG IN"/>
-                </Stack>
-                
+                <LoginForm/>
+                  
                 <Stack spacing={1}>
                     <Typography variant="body2" color="grey" align="center">Or Connect Using</Typography>
                     <Stack direction="row" justifyContent="center" spacing={2}>

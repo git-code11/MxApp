@@ -9,8 +9,11 @@ import Stack from "@mui/material/Stack";
 import UserIcon from "@mui/icons-material/Person";
 
 import BackHeader from "../../components/BackHeader";
-import {Input, Button, Caption} from "../../components/AuthFormInput";
 
+import Button from "../../components/Link/Button";
+import Caption from "../../components/Link/Caption";
+import {Input} from "../../components/Form/AuthForm";
+import FormProvider from "../../components/Form";
 
 const fields  = [
     {name:"email", label:"Enter Email Address", icon:<UserIcon/>},
@@ -28,10 +31,14 @@ export default function(){
                     
                     <Typography variant="h5" align="center" sx={{textDecoration:"underline"}}>Recover Account</Typography>
 
-                    <Stack spacing={4} alignItems="center">
-                        {fields.map(d=><Input name={d.name} label={d.label} icon={d.icon}/>)}
-                        <Button label="RECOVER" path="/auth/new_password"/>
-                    </Stack>
+
+                    <FormProvider>
+                        <Stack spacing={4} alignItems="center">
+                            {fields.map(d=><Input {...d}/>)}
+                            <Button label="RECOVER" path="/auth/new_password"/>
+                        </Stack>
+                    </FormProvider>
+                    
 
                     <Caption text1="Do you want a new account?" text2="Click here" href="/auth/log_in"/>
                     

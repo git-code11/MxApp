@@ -13,39 +13,40 @@ import Tab from "@mui/material/Tab";
 import {SwitchTransition} from "react-transition-group";
 import Fade from "@mui/material/Fade";
 
-import { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
+
 
 interface PreviewDocumentProps{
     active:boolean,
     onClose?:()=>void,
     title:string,
-    documents:{
-        label:string,
-        path:string
-    }[]
+    documents:any
 }
 
 const PreviewPage = ({src}:{src:string})=><Avatar variant="square" src={src} sx={{width:"100%", height:"auto", mx:"auto"}}/>
 
-export default (props:PreviewDocumentProps)=>{
-    const [active, setActive] = useState(0);
+
+const PreviewDocument =  (props:PreviewDocumentProps)=>{
+    const {active, title, onClose, documents} = props;
     
-    const pages = useMemo(()=>props.documents.map(d=><PreviewPage src={d.path}/>),[props.documents]);
+    const [_active, setActive] = useState(0);
+    
+    const pages = useMemo(()=>documents.map((d:any)=><PreviewPage src={d.path}/>),[documents]);
 
     return (
-        <Dialog open={props.active} onClose={props.onClose}>
-            <DialogTitle>{props.title}</DialogTitle>
+        <Dialog open={active} onClose={onClose}>
+            <DialogTitle>{title}</DialogTitle>
             <DialogContent>
                 <Stack spacing={1}>
-                    {props.documents.length>1?(
-                        <Tabs value={active} onChange={(_,value)=>setActive(value)}>
-                            {props.documents.map(d=><Tab key={d.label} label={d.label}/>)}
+                    {documents.length>1?(
+                        <Tabs value={_active} onChange={(_,value)=>setActive(value)}>
+                            {props.documents.map((d:any)=><Tab key={d.label} label={d.label}/>)}
                         </Tabs>)
                     :""}
                     <SwitchTransition>
-                        <Fade key={props.documents[active].path}>
+                        <Fade key={props.documents[_active].path}>
                             <div>
-                            {pages[active]} 
+                            {pages[_active]} 
                             </div>
                         </Fade>
                     </SwitchTransition>
@@ -58,3 +59,27 @@ export default (props:PreviewDocumentProps)=>{
     );
 }
 
+
+const Preview = (props:any)=>{
+    const {title, documents, ...moreProps} = props;
+    
+    const [active, setActive] = useState(false);
+
+    const onClose = useCallback(()=>{
+        setActive(false);
+    },[setActive]);
+
+    const onOpen = useCallback(()=>{
+        setActive(true);
+    },[setActive]);
+
+    return (
+        <>
+            <Button {...moreProps} onClick={onOpen}/>
+            <PreviewDocument {...{active, title, documents, onClose}}/>
+        </>
+    );
+}
+
+export default PreviewDocument;
+export {Preview};

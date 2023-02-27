@@ -9,42 +9,66 @@ import Button from "@mui/material/Button";
 
 import CheckIcon from "@mui/icons-material/Check";
 
+import TransactionStatus from "../../Transaction/Status";
 
-import TransactionStatus,{TransctionStatusProps} from "../../Transaction/Status";
+import TransactionDetails from "../../Transaction/Details";
 
-import TransactionDetails,{TransactionDetailsProps} from "../../Transaction/Details";
-import { ViewSectionProps } from "../Base";
+import {Preview} from "../../PreviewDocument";
+import {useSelector} from "react-redux";
+import { createSelector } from '@reduxjs/toolkit';
 
 
-interface CompleteSectionProps extends ViewSectionProps{
-    transactionStatus:TransctionStatusProps,
-    transactionDetails:TransactionDetailsProps
+const _selector = createSelector((state:any)=>state.exchange.prove, (pv:any)=>(
+    [
+        {label:"Debit Doc", path:pv.debit},
+        {label:"Credit Doc", path:pv.credit}
+    ]
+));
+
+
+const PreviewButton = ()=>{
+    const documents = useSelector(_selector);
+
+    return (
+        <Preview sx={{py:2}} variant="contained" documents={documents} color="info">View All Documents</Preview>
+    );
+}
+
+const SaveButton = ()=>{
+    return (
+        <Button sx={{py:2, color:"#fff"}} variant="contained" color="secondary">Save Reciept</Button>
+    );
 }
 
 
-export default (props:CompleteSectionProps)=>
-    <Box>
-        <Paper sx={{p:2}}>
-            <Stack spacing={3}>
-                <Typography fontStyle="italic">Transaction Completed</Typography>
-                
-                <Stack alignItems="center">
-                    <CheckIcon sx={{fontSize:"4rem"}} color="success"/>
-                </Stack>
 
-                <TransactionStatus  {...props.transactionStatus}/>
-                
-                <TransactionDetails  {...props.transactionDetails}/>
+export default ()=>{
 
-                <Stack spacing={1}>
-                    <Typography variant="caption" sx={(theme)=>({color:theme.palette.success.main})} fontWeight="bold">
-                        NOTE: Transaction is Completed<br/>
-                        <u>Contact Admin Via Whatsapp</u>
-                    </Typography>
-                    <Button sx={{py:2, color:"#fff"}} variant="contained" color="info" onClick={props.onPreview}>View All Documents</Button>
-                    <Button sx={{py:2, color:"#fff"}} variant="contained" color="secondary">Save Reciept</Button>
+    return (
+        <Box>
+            <Paper sx={{p:2}}>
+                <Stack spacing={3}>
+                    <Typography fontStyle="italic">Transaction Completed</Typography>
+                    
+                    <Stack alignItems="center">
+                        <CheckIcon sx={{fontSize:"4rem"}} color="success"/>
+                    </Stack>
+
+                    <TransactionStatus/>
+                    
+                    <TransactionDetails/>
+
+                    <Stack spacing={1}>
+                        <Typography variant="caption" sx={(theme)=>({color:theme.palette.success.main})} fontWeight="bold">
+                            NOTE: Transaction is Completed<br/>
+                            <u>Contact Admin Via Whatsapp</u>
+                        </Typography>
+                        <PreviewButton/>
+                        <SaveButton/>
+                    </Stack>
                 </Stack>
-            </Stack>
-        </Paper>
-    </Box>
-;
+            </Paper>
+        </Box>
+
+    );
+};

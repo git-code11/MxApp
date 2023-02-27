@@ -1,10 +1,16 @@
 import '../styles/globals.css'
 import { AppProps } from 'next/app';
-
+import Head from 'next/head';
 
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
+
+import AppProvider from "../redux";
+import FirebaseProvider from "../context/firebase";
+
+import NotificationStatus from "../components/NotificationStatus";
+
 
 declare module '@mui/material/styles'{
   interface Palette{
@@ -53,9 +59,23 @@ const theme = createTheme({
 export default function App({ Component, pageProps }: AppProps) {
   return(
     <ThemeProvider theme={theme}>
+      <Head>
+        <link rel="manifest" href="manifest.webmanifest"/>
+      </Head>
       <Box sx={{backgroundColor:"background.paper", color:"text.primary", minHeight:"100vh"}}>
         <CssBaseline enableColorScheme={true}/>
-        <Component {...pageProps} />
+        
+        <FirebaseProvider>
+          <AppProvider>
+            <Component {...pageProps} />
+            
+            <>
+              <NotificationStatus/>
+            </>
+            
+          </AppProvider>
+        </FirebaseProvider> 
+          
       </Box>
     </ThemeProvider>
   );

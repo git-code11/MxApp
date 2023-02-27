@@ -1,4 +1,4 @@
-
+import React, {useCallback} from "react";
 
 import Container from "@mui/material/Container";
 import Typography from '@mui/material/Typography';
@@ -13,16 +13,76 @@ import EmailIcon from "@mui/icons-material/EmailOutlined";
 import PhoneIcon from "@mui/icons-material/PhoneAndroidOutlined";
 
 import BackHeader from "../../components/BackHeader";
-import {Input, Button, Caption} from "../../components/AuthFormInput";
+
+import Caption from "../../components/Link/Caption";
+import FormProvider  from "../../components/Form";
+import { InputAction, Input} from "../../components/Form/AuthForm";
+
+import * as yup from "yup";
+
+import * as regex_test from "../../components/input_test";
+
+import {useDispatch} from "react-redux";
+import * as notifyAction from "../../redux/notify_status";
+import * as loaderAction from "../../redux/loader_status";
 
 
 const fields  = [
-    {name:"user_name", label:"User Name", icon:<UserIcon/>},
-    {name:"email", label:"Email", icon:<EmailIcon/>},
-    {name:"phone_number", label:"Phone", icon:<PhoneIcon/>},
-    {name:"password", label:"Password", icon:<PasswordIcon/>},
-    {name:"confirm_password",label:"Confirm Password", icon:<ConfirmPasswordIcon/>}
+    {name:"userName", label:"User Name", icon:<UserIcon/>, type:"text"},
+    {name:"email", label:"Email", icon:<EmailIcon/>, type:"email"},
+    {name:"phoneNumber", label:"Phone", icon:<PhoneIcon/>, type:"tel"},
+    {name:"password", label:"Password", icon:<PasswordIcon/>, type:"password"},
+    {name:"confirmPassword",label:"Confirm Password", icon:<ConfirmPasswordIcon/>, type:"password"}
 ];
+
+
+const schema = yup.object({
+    userName: yup.string().min(7).matches(regex_test.name,"should consist of ._~A-Za-z0-9").required(),
+    email: yup.string().matches(regex_test.email, "email invalid").required(),
+    phoneNumber:yup.string().matches(regex_test.tel, "Invalid telephone number").required(),
+    password:yup.string().min(4).required(),
+    confirmPassword:yup.string().test("ref password","not matched",(value, ctx)=>value === ctx.parent?.password)
+  }).required();
+
+
+    // const dispatch = useDispatch();
+
+    // const {app} = useFirebase();
+
+    // const onSubmitTask = useCallback(async (data:any)=>{
+    //     dispatch(loaderAction.start());
+    //         await app.createUserWithEmailAndPassword(data.email, data.password)
+    //         .then((u:any)=>{
+    //             dispatch(loaderAction.stop());
+    //             console.log("New User Signed in");
+    //             if(u.user)
+    //                 dispatch(notifyAction.success("Signed In"));
+    //                 dispatch(notifyAction.error(u.error.message));
+    //         })
+    //         dispatch(loaderAction.stop());
+
+    // },[dispatch]);
+    
+
+
+const SignUpForm = ()=>{
+
+    const submit = (e:any)=>{
+        console.log(e);
+        console.log("has to submit");
+    }
+
+    return (
+        <FormProvider schema={schema}>
+            <Stack spacing={2}>
+                {fields.map(d=><Input key={d.name} {...d}/>)}
+                <Stack alignItems="center">
+                <InputAction action={submit} label="CREATE"/>
+                </Stack>
+            </Stack>
+        </FormProvider>
+    );
+}
 
 export default function(){
     return(
@@ -33,23 +93,18 @@ export default function(){
                 <Stack component={Container} 
                         spacing={4}
                         >
-                    
+
                     <Stack spacing={0.25} alignItems="center">
                         <Typography variant="h5" fontWeight="bold">Let's Get Started!</Typography>
                         <Typography variant="body2">Log in to your account and start swapping</Typography>
                     </Stack>
 
-                    <Stack spacing={2}>
-                        {fields.map(d=><Input name={d.name} label={d.label} icon={d.icon}/>)}
-                    </Stack>
+                    <SignUpForm/>
                     
-                    <Stack alignItems="center">
-                        <Button label="CREATE"/>
-                    </Stack>
-                
                     <Caption text1="Already have an account?" text2="Log In" href="/auth/log_in"/>
                 </Stack>
             </Box>
         </Box>
     );
-}
+};
+

@@ -2,66 +2,76 @@ import { Box, Stack, Typography, IconButton,TextField, InputAdornment } from "@m
 import CopyIcon from "@mui/icons-material/CopyAll"
 import SimpleFieldTable from "../SimpleFieldTable";
 
+import {useSelector} from "react-redux";
+import {createSelector} from "@reduxjs/toolkit";
+
+const _bankSelector = createSelector((state:any)=>state.exchange.paymentInfo.bank,
+                    (data)=>({
+                        "Bank Name":data.bankName,
+                        "Account Name":data.acctName,
+                        "Account Number":data.acctNo,
+                        "Amount":data.amount
+                    }));
+
 
 interface BankTransactionDetailsProps{
     bankName:string,
-    accountName:string,
-    accountNumber:string,
+    acctName:string,
+    acctNo:string,
     amount:string|number
 }
 
-const bankDataClean  = (data:BankTransactionDetailsProps)=>({
-    "Bank Name":data.bankName,
-    "Account Name":data.accountName,
-    "Account Number":data.accountNumber,
-    "Amount":data.amount
-});
+const BankTransactionDetails = ()=>{
+    const data = useSelector(_bankSelector);
+    const state = useSelector(d=>d);
 
-const BankTransactionDetails = (props:BankTransactionDetailsProps)=><SimpleFieldTable data={bankDataClean(props)}/>;
+    return <SimpleFieldTable data={data}/>;
+}
 
 
-interface WalletTransactionDetailsProps {
+const _walletSelector = createSelector((state:any)=>state.exchange.paymentInfo,
+                    (ex:any)=>ex.crypto??{}
+                    );
+
+interface WalletTransactionDetailsProps{
     name:string,
     baseName?:string,
     address:string,
     amount:string|number
 }
 
-const WalletTransactionDetails = (props:WalletTransactionDetailsProps)=>
-    <Stack spacing={1}>
-        <Box>
-            <Typography>Wallet Crypto: <b>{props.name} <i>{`(${props.baseName})`}</i></b></Typography>
-            <Typography>Amount: <b>{props.amount}</b></Typography>
-        </Box>
-        <TextField 
-        margin="dense"
-        defaultValue={props.address}
-        InputProps={{
-            readOnly:true,
-            endAdornment:(
-                <InputAdornment position="end">
-                    <IconButton color="primary">
-                        <CopyIcon/>
-                    </IconButton>
-                </InputAdornment>
-            )
-        }}
-        focused
-        />     
-    </Stack>
-;
+const WalletTransactionDetails = ()=>{
+    const {name, baseName, address, amount}:any = useSelector(_walletSelector);
 
-
-export interface TransactionDetailsProps{
-    wallet?:WalletTransactionDetailsProps,
-    bank?:BankTransactionDetailsProps,
+    return (
+        <Stack spacing={1}>
+            <Box>
+                <Typography>Wallet Crypto: <b>{name} <i>{`(${baseName})`}</i></b></Typography>
+                <Typography>Amount: <b>{amount}</b></Typography>
+            </Box>
+            <TextField 
+            margin="dense"
+            defaultValue={address}
+            InputProps={{
+                readOnly:true,
+                endAdornment:(
+                    <InputAdornment position="end">
+                        <IconButton color="primary">
+                            <CopyIcon/>
+                        </IconButton>
+                    </InputAdornment>
+                )
+            }}
+            focused
+            />     
+        </Stack>
+    );
 }
 
-export default (props:TransactionDetailsProps)=>
+export default ()=>
     <>
-        {props.bank ? <BankTransactionDetails {...props.bank}/>:""}
-
-        {props.wallet ? <WalletTransactionDetails {...props.wallet}/>:""}
+        <BankTransactionDetails/>
+        <WalletTransactionDetails/>
     </>
 ;
 

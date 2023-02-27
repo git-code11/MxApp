@@ -16,7 +16,7 @@ export default ({data}:SimpleDataTableProps)=>
     <Table>
         <TableBody>
             {data.map(d=>
-                <TableRow>
+                <TableRow  key={d.label}>
                     <TableCell>{d.label}</TableCell>
                     <TableCell>{d.value}</TableCell>
                 </TableRow>

@@ -17,7 +17,7 @@ export default ({data}:SimpleFieldTableProps)=>
         <Table>
         <TableBody>
             {Object.entries(data).map(d=>
-                <TableRow>
+                <TableRow key={d[0]}>
                     <TableCell>{d[0]}</TableCell>
                     <TableCell>{d[1]}</TableCell>
                 </TableRow>

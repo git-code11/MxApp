@@ -1,0 +1,16 @@
+{
+    "theme_color" : "#070e23",
+    "background_color" : "#d89b05",
+    "display" : "standalone",
+    "scope" : "/",
+    "start_url" : "/",
+    "name" : "Mx-APP Exchange",
+    "short_name" : "MX",
+    "description" : "We exchange crypto and cash",
+    "icons": [
+        {
+          "src": "mx-icon.png",
+          "type": "image/png"
+        }
+    ]
+}
