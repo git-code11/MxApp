@@ -19,11 +19,11 @@ import TransactionStatus from "../../Transaction/Status";
 import TransactionDetails from "../../Transaction/Details";
 
 
-import {useNext} from "./Provider";
 import {Preview} from "../../PreviewDocument";
 import {useSelector} from "react-redux";
 import { createSelector } from '@reduxjs/toolkit';
 
+import {useNav} from ".";
 
 const _selector = createSelector((state:any)=>state.exchange.prove, (pv:any)=>(
     [
@@ -41,7 +41,7 @@ const PreviewButton = ()=>{
 }
 
 const ActionButton = ()=>{
-    const next = useNext();
+    const {next}:any = useNav();
 
     return (
         <Button sx={{py:2}} variant="contained" color="success" onClick={next}>Complete Transaction</Button>

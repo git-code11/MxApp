@@ -28,7 +28,7 @@ const DisplaySwapSection = ()=>
                 <Grid container spacing={1.5}>
                     {Array(6).fill(0).map((x,i)=>
                         <Grid key={i} xs={6} lg={4} item>
-                            <Item path="/exchange"/>
+                            <Item path={`/exchange/select?type=${i%2==0?"SCP":"SBC"}`}/>
                         </Grid>
                     )}
                 </Grid>

@@ -11,10 +11,10 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForwardIosRounded";
 
 import SimpleFieldTable from "../../SimpleFieldTable";
 
-import {useNext} from "./Provider";
 import { createSelector } from "@reduxjs/toolkit";
 import {useSelector} from "react-redux";
 
+import {useNav} from ".";
 
 const exchangeSelector = createSelector((state:any)=>state.exchange, 
                     (data:any)=>({
@@ -24,7 +24,7 @@ const exchangeSelector = createSelector((state:any)=>state.exchange,
                     }));
 
 export default ()=>{
-    const next:any = useNext();
+    const {next}:any = useNav();
     
     const data = useSelector(exchangeSelector);
     

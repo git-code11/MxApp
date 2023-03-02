@@ -1,23 +1,25 @@
 
-import {useCallback} from "react";
-
 import Typography from '@mui/material/Typography';
 
 import Paper from "@mui/material/Paper";
 
 import Stack from "@mui/material/Stack";
 
-import {useNext} from "./Provider";
 
-import FormProvider from "../../Form";
+import FormProvider,{useForm} from "../../Form";
 import {Input,Select, SelectRef, InputAction} from "../../Form/ServiceForm";
 
 import * as yup from 'yup';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { createSelector } from "@reduxjs/toolkit";
-import {addService} from "../../../redux/exchange";
 
+import {useNav, useQuery} from ".";
+
+import { useEffect, useMemo } from 'react';
+
+
+import {addService} from "../../../redux/exchange";
 
 const market = {
     services:[
@@ -50,32 +52,55 @@ const _selector = createSelector((state:any)=>state.exchange,
 }));
 
 
-const SelectionForm = ()=>{
-    const next:any = useNext();
+const ServiceField = ()=>{
+    const {next}:any = useNav();
+
     const dispatch = useDispatch();
+
+    const {setValue} = useForm();
+    const query = useQuery();
+    const serviceSpecified = useMemo(()=>market.services.map((d:any)=>d.value).includes(query?.type),[query?.type]);
+
+    useEffect(()=>{
+        if(serviceSpecified){
+            setValue("type",query?.type);
+            setValue("quantity", "");
+            setValue("description", "");
+        }
+    },[serviceSpecified, query?.type]);
+
+
+    const submit = (data:any)=>{
+
+        dispatch(addService({...data}));
+        next();
+    }
+
+    return (
+        <Stack spacing={2}>
+            <Input {...fields[0]}/>
+            <Select {...fields[1]}/>
+            <SelectRef {...fields[2]}/>
+            <InputAction 
+                    {...{ sx:{py:2}, variant:"contained", color:"primary" }} 
+                    action={submit} 
+                    label="Review"/>
+        </Stack>
+    );
+}
+
+const SelectionForm = ()=>{
 
     const data = useSelector(_selector);
 
-    const submit = useCallback((data: any)=>{
-        dispatch(addService(data));
-        next();
-    },[dispatch, next]);
-
     return (
         <FormProvider schema={schema} defaultValues={data}>
-
-            <Stack spacing={2}>
-                <Input {...fields[0]}/>
-                <Select {...fields[1]}/>
-                <SelectRef {...fields[2]}/>
-                <InputAction 
-                        {...{ sx:{py:2}, variant:"contained", color:"primary" }} 
-                        action={submit} 
-                        label="Review"/>
-            </Stack>
+            <ServiceField/>
         </FormProvider>
     );
 }
+
+
 
 export default ()=>{
 

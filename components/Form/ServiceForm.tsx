@@ -22,14 +22,15 @@ interface InputContainerProps{
     value?:any,
     inputRef?:any,
     onChange?:any,
-    onBlur?:any
+    onBlur?:any,
+    readOnly?:boolean
 }
 
 
 
 const InputContainer = (props:InputContainerProps)=>{
 
-    const {type, error, name, errorText, helperText, label, onChange, onBlur, value, inputRef} = props;
+    const {type, error, name, errorText, helperText, label, onChange, onBlur, value, inputRef, readOnly} = props;
  
     return (
         <TextField
@@ -37,7 +38,7 @@ const InputContainer = (props:InputContainerProps)=>{
                 error={!!error?.type}
                 helperText={((!!error?.type)?(errorText??error?.message):helperText) as string}
                 fullWidth
-                {...{onChange, onBlur, value, inputRef, name, label}}
+                {...{onChange, onBlur, value, inputRef, name, label, readOnly}}
                 value={value??""}
         />
     );
@@ -52,14 +53,14 @@ interface SelectContainerProps extends InputContainerProps{
 
 const SelectContainer = (props:SelectContainerProps)=>{
 
-    const {options, error, name, errorText, helperText, label, onChange, onBlur, value, inputRef} = props;
+    const {options, error, name, errorText, helperText, label, onChange, onBlur, value, inputRef, readOnly} = props;
  
     return (
         <TextField select
                 error={!!error?.type}
                 helperText={((!!error?.type)?(errorText??error?.message):helperText) as string}
                 fullWidth
-                {...{onChange, onBlur, value, inputRef, name, label}}
+                {...{onChange, onBlur, value, inputRef, name, label, readOnly}}
                 value={value??""}
         >
             {options?.map((option:any)=><MenuItem key={option.value} value={option.value}>{option?.label ?? option.value}</MenuItem>)}

@@ -44,8 +44,7 @@ const initialState = {
     prove:{
         debit:"",
         credit:""
-    },
-    progress:0
+    }
 };
 
 export const slice = createSlice({
@@ -82,25 +81,14 @@ export const slice = createSlice({
     addCreditProve(state, action){
         const data = action.payload;
         state.prove.credit = data;
-    },
-
-    onNext(state){
-        if(state.progress===4)
-            return
-        state.progress += 1;
-    },
-
-    onPrev(state){
-        if(state.progress===0)
-            return
-        state.progress -= 1;
     }
+
   },
 });
 
 
 
 // Action creators are generated for each case reducer function
-export const { addService, addDebitProve, addCreditProve, onNext, onPrev} = slice.actions
+export const { addService, addDebitProve, addCreditProve} = slice.actions
 
 export default slice.reducer;

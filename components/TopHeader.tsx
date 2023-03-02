@@ -33,7 +33,7 @@ export default ()=>
     <AppBar position="fixed">
         <Toolbar>
             <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                MxApp
+                MxApp_
             </Typography>
 
             <Profile/>       

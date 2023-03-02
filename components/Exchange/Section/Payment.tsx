@@ -19,8 +19,6 @@ import TransactionStatus from "../../Transaction/Status";
 
 import TransactionDetails from "../../Transaction/Details";
 
-import {useNext} from "./Provider";
-
 import FormProvider from "../../Form";
 import {UploadBtn} from "../../Form/ServiceForm";
 
@@ -34,6 +32,8 @@ import {Preview} from "../../PreviewDocument";
 
 import {useSelector} from "react-redux";
 import { createSelector } from '@reduxjs/toolkit';
+
+import {useNav} from ".";
 
 
 const UploadForm = ()=>{
@@ -76,7 +76,7 @@ const PreviewButton = ()=>{
 
 
 const ActionButton = ()=>{
-    const next:any = useNext();
+    const {next}:any = useNav();
 
     return (
     <Stack direction="row" justifyContent="space-between">
