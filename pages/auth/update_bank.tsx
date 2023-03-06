@@ -12,6 +12,12 @@ import * as yup from "yup";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 
+import { useSelector, useDispatch } from "react-redux";
+import { createSelector } from "@reduxjs/toolkit";
+
+import {updateBank} from "../../redux/user";
+import { useCallback } from "react";
+
 
 const bankInfoData = [
     {name:"bankName", label:"Bank Name"},
@@ -26,11 +32,19 @@ const schema = yup.object({
     acctName:yup.string().required()
   }).required();
 
+
+const _selector = createSelector((state:any)=>state.user.info,(info:any)=>({...info?.bank}));
+
 const UpdateBankForm = ()=>{
-    const submit = console.log;
+    
+    const dispatch = useDispatch();
+
+    const defaultValues = useSelector(_selector);
+
+    const submit = useCallback((data:any)=>dispatch((updateBank as any)(data)),[dispatch]);
 
     return (
-    <FormProvider schema={schema}>
+    <FormProvider schema={schema} defaultValues={defaultValues}>
         <Paper elevation={3} sx={{p:2}}>
             <Stack spacing={2}>
                 <Typography variant="h6">Bank Information</Typography>

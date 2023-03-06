@@ -64,7 +64,7 @@ const ServiceField = ()=>{
     useEffect(()=>{
         if(serviceSpecified){
             setValue("type",query?.type);
-            setValue("quantity", "");
+            //setValue("quantity", "");
             setValue("description", "");
         }
     },[serviceSpecified, query?.type]);

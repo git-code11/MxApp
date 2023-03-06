@@ -180,12 +180,19 @@ const FormRefInput = (InputComponent:React.FC<any>)=>(props:RefInputProps)=>{
     const {name, refName, onRefChange, ...moreProps} = props;
     const {setValue} = useForm();
     const refValue = h_useWatch({name:refName});
-    const [cbData, cb] = useState();
+    const curValue = h_useWatch({name});
+    const [cbData, cb] = useState<any>();
+    
     
     useEffect(()=>{
-        setValue(name,"");
+        console.log({cbData, curValue, refValue});
+        if(cbData && !(cbData?.some((d:any)=>typeof d==="object"?d.value === curValue:d===curValue)))
+            setValue(name,"");
+    },[name, curValue, cbData]);
+
+    useEffect(()=>{
         onRefChange(refValue, cb);
-    },[refValue, name]);
+    },[refValue]);
 
     return (
         <InputComponent name={name} {...moreProps} cbData={cbData}/>

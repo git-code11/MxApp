@@ -4,7 +4,7 @@ import ReviewSection from "./Review";
 import PaymentSection from "./Payment";
 import ConfirmSection from "./Confirm";
 import CompleteSection from "./Complete";
-
+import ExecuteSection from "./Execute";
 
 import { useRouter } from "next/router";
 import { useCallback } from "react";
@@ -24,7 +24,7 @@ const allSection = {
     payment:{component:PaymentSection, labelpos:2, prevPath:"/home", nextPath:"/exchange/confirm"},
     confirm:{component:ConfirmSection, labelpos:3, prevPath:"/home", nextPath:"/exchange/complete"},
     complete:{component:CompleteSection, labelpos:4, prevPath:"/home", nextPath:"/home"},
-    admin:{component:()=><div>Admin Page</div>, labelpos:5, prevPath:"/home", nextPath:"/home"}
+    admin:{component:ExecuteSection, labelpos:5, prevPath:"/home", nextPath:"/home"}
 } as any;
 
 

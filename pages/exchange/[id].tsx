@@ -18,6 +18,8 @@ import {useRouter} from "next/router";
 import allSection,{stepsLabel, getId, useNav} from "../../components/Exchange/Section";
 
 
+import { useAuthentication } from "../../hooks/auth";
+
 const ViewSection = ({id}:any)=>{
     
     const Section = allSection[id].component;
@@ -29,15 +31,13 @@ const ViewSection = ({id}:any)=>{
 
 export default function(){
     
+    useAuthentication();
+    
     const containerRef = useRef(null);
 
     const router = useRouter();
     
-    const id = useMemo(()=>{
-        console.log("query recomputing");
-        return getId(router.query.id as string);
-    },[router.query]);
-
+    const id = useMemo(()=>getId(router.query.id as string),[router.query]);
 
     const {prev}:any = useNav();
 

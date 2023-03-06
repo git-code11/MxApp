@@ -8,8 +8,8 @@ import Box from "@mui/material/Box";
 import TransactionTable,{TransactionTableProps} from "../../components/Transaction/Table";
 
 
-const tempData = ["Successful","Successful","Failed","Processing","Processing"].map(x=>
-    ({id:"mxt73002", description:"A note to describe the transaction", 
+const tempData = ["Successful","Successful","Failed","Processing","Processing"].map((x, i)=>
+    ({id:`mxt-${((i+1)*234008)%234456}`, description:"A note to describe the transaction", 
     comment:"Transaction Document should be here", timeStamp:(new Date()).toDateString(), status:x}));
 
 export default function(){

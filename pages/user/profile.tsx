@@ -15,7 +15,7 @@ import Tab from "@mui/material/Tab";
 
 import EditIcon from "@mui/icons-material/Edit";
 
-import Info,{InfoProps} from "../../components/Profile/Info";
+import Info from "../../components/Profile/Info";
 
 import Slide from "@mui/material/Slide";
 
@@ -24,37 +24,58 @@ import {SwitchTransition} from "react-transition-group";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 
-const accountData = {
-    "First Name":"John",
-    "Last Name":"Wick",
-    "Phone Number":"+234 54993738",
-    "Email": "john.wick@MxAPp.com",
-    "Nationality":"China",
-    "State":"Hong Kong",
-    "Address":"23009, Mark Simeon, Grolle"
-}
+import { useSelector } from "react-redux";
+import { createSelector } from "@reduxjs/toolkit";
 
-const bankData = {
-    "Bank Name":"Kuba Microfinance Inc.",
-    "Account Number":"234562455",
-    "Account Name":"Wick, John"
-}
+import csc  from "countrycitystatejson"; 
 
-const Pics = ()=>
-    <Stack direction="row" justifyContent="center">
-        <Avatar sx={{width:150,height:150}} src="/pics.jpeg"/>
-    </Stack>
+import { useAuthentication } from "../../hooks/auth";
+
+const imgPicsSelector = createSelector((state:any)=>state.user.info, (info:any)=>info?.image);
+const Pics = ()=>{
+    const imgPath = useSelector(imgPicsSelector);
+    return (
+        <Stack direction="row" justifyContent="center">
+            <Avatar sx={{width:150,height:150}} src={imgPath}/>
+        </Stack>
+    );
+}
 ;
 
+const accountSelector = createSelector((state:any)=>state.user.info?.account??{},
+                                        (acct)=>({
+                                            "First Name":acct.firstName,
+                                            "Last Name": acct.lastName,
+                                            "Phone Number":acct.phoneNumber,
+                                            "Email": acct.email,
+                                            "Nationality":csc.getCountryByShort(acct.nationality)?.name??"",
+                                            "State":acct.state,
+                                            "Address":acct.address
+                                        }));
 
-const UserInfo = ({data}:{data:InfoProps["data"]})=>
-    <Stack spacing={2}>
-        <Pics/>
-        <Info title="Personal Details" data={data}/>  
-    </Stack>
+const UserInfo = ()=>{
+    const data = useSelector(accountSelector);
+    console.log(useSelector(state=>state.user));
+    
+    return (
+        <Stack spacing={2}>
+            <Pics/>
+            <Info title="Personal Details" data={data}/>  
+        </Stack>
+    );
+}
 ;
 
-const BankInfo = ({data}:{data:InfoProps["data"]})=><Info title="Account Details" data={data}/>
+const bankSelector = createSelector((state:any)=>state.user.info?.bank??{},
+                                        (bank)=>({
+                                            "Bank Name":bank.bankName??"",
+                                            "Account Number":bank.acctNo??"",
+                                            "Account Name":bank.acctName??""
+                                        }));
+const BankInfo = ()=>{
+    const data = useSelector(bankSelector)
+    return <Info title="Account Details" data={data}/>
+}
 ;
 
 const InfoSection = ({active, page}:{active:number, page:JSX.Element})=>{
@@ -93,8 +114,10 @@ export default function(){
     const [active, setActive] = useState(0);
     const onChange = useCallback((_:any,value:number)=>setActive(value),[setActive]);
 
-    const pages = useMemo(()=>[<UserInfo data={accountData}/>,<BankInfo data={bankData}/>],[]);
+    const pages = useMemo(()=>[<UserInfo/>,<BankInfo/>],[]);
 
+    useAuthentication();
+    
     return (
         <Box>
             <InfoHeader active={active} onChange={onChange}/>

@@ -11,6 +11,11 @@ import FirebaseProvider from "../context/firebase";
 
 import NotificationStatus from "../components/NotificationStatus";
 
+import LoadingStatus from "../components/LoadingStatus";
+
+import {useRouteChangeHandler, useAuthChangeListener, useProfileChangeListener} from "../hooks/auth";
+
+
 
 declare module '@mui/material/styles'{
   interface Palette{
@@ -56,7 +61,22 @@ const theme = createTheme({
 });
 
 
+const CustomProgressOnRoute = ()=>{
+  useRouteChangeHandler();
+  useAuthChangeListener();
+  useProfileChangeListener();
+  return (
+    <div/>
+  );
+}
+
+
+
 export default function App({ Component, pageProps }: AppProps) {
+
+
+  
+
   return(
     <ThemeProvider theme={theme}>
       <Head>
@@ -67,12 +87,15 @@ export default function App({ Component, pageProps }: AppProps) {
         
         <FirebaseProvider>
           <AppProvider>
-            <Component {...pageProps} />
-            
+
             <>
+              <CustomProgressOnRoute/>
               <NotificationStatus/>
+              <LoadingStatus/>
             </>
-            
+
+            <Component {...pageProps} />
+
           </AppProvider>
         </FirebaseProvider> 
           

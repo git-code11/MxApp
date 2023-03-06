@@ -6,7 +6,7 @@ import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 
-import csc from "countrycitystatejson"; 
+import csc  from "countrycitystatejson"; 
 
 import FormProvider from "../../components/Form";
 import {Input, ComboSelect as Select, ComboSelectRef as SelectRef, InputAction, InputImage} from "../../components/Form/UpdateForm";
@@ -16,6 +16,13 @@ import * as regex_test from "../../components/input_test";
 import * as yup from "yup";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
+
+import { useSelector, useDispatch } from "react-redux";
+import { createSelector } from "@reduxjs/toolkit";
+
+import {updateProfile} from "../../redux/user";
+import { useCallback } from "react";
+
 
 const countryData = csc.getCountries().map((d:any)=>(d.shortName))
 
@@ -45,10 +52,16 @@ const schema = yup.object({
     image:yup.string().required()
   }).required();
 
+
+const _selector = createSelector((state:any)=>state.user.info,(info:any)=>({...info?.account, image:info?.image}));
 const UpdateProfileForm = ()=>{
-    const submit = console.log;
+    const dispatch = useDispatch();
+    const defaultValues = useSelector(_selector);
+
+    const submit = useCallback((data:any)=>dispatch((updateProfile as any)(data)),[dispatch]);
+
     return (
-    <FormProvider schema={schema}>
+    <FormProvider schema={schema} defaultValues={defaultValues}>
         <Paper elevation={3} sx={{p:2}}>
             <Stack spacing={2}>
                 <Typography variant="h6">User Information</Typography>

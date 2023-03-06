@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React from "react";
 
 import Container from "@mui/material/Container";
 import Typography from '@mui/material/Typography';
@@ -22,10 +22,7 @@ import * as yup from "yup";
 
 import * as regex_test from "../../components/input_test";
 
-import {useDispatch} from "react-redux";
-import * as notifyAction from "../../redux/notify_status";
-import * as loaderAction from "../../redux/loader_status";
-
+import {useAuthentication, useSignUp} from "../../hooks/auth";
 
 const fields  = [
     {name:"userName", label:"User Name", icon:<UserIcon/>, type:"text"},
@@ -45,32 +42,10 @@ const schema = yup.object({
   }).required();
 
 
-    // const dispatch = useDispatch();
-
-    // const {app} = useFirebase();
-
-    // const onSubmitTask = useCallback(async (data:any)=>{
-    //     dispatch(loaderAction.start());
-    //         await app.createUserWithEmailAndPassword(data.email, data.password)
-    //         .then((u:any)=>{
-    //             dispatch(loaderAction.stop());
-    //             console.log("New User Signed in");
-    //             if(u.user)
-    //                 dispatch(notifyAction.success("Signed In"));
-    //                 dispatch(notifyAction.error(u.error.message));
-    //         })
-    //         dispatch(loaderAction.stop());
-
-    // },[dispatch]);
-    
-
 
 const SignUpForm = ()=>{
 
-    const submit = (e:any)=>{
-        console.log(e);
-        console.log("has to submit");
-    }
+    const {email:submit} = useSignUp();
 
     return (
         <FormProvider schema={schema}>
@@ -85,6 +60,9 @@ const SignUpForm = ()=>{
 }
 
 export default function(){
+    
+    useAuthentication((d:any)=>!d,'/home');
+
     return(
         <Box>
             <BackHeader/>

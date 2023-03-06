@@ -22,22 +22,30 @@ import EmailIcon from "@mui/icons-material/Email";
 import PasswordIcon from "@mui/icons-material/Password";
 import HistoryIcon from "@mui/icons-material/ClearAll"; 
 
+import { useAuthentication ,useLogOut} from "../../hooks/auth";
+
 const menuData = [
     {label:"My Profile", icon:UserIcon, path:"/user/profile"},
     {label:"Update Profile", icon:UserUpdateIcon, path:"/auth/update_profile"},
     {label:"Change Password", icon:PasswordIcon, path:"/auth/change_password"},
     {label:"Change Email", icon:EmailIcon, path:"/auth/change_email"},
     {label:"Clear Transaction History", icon:HistoryIcon, action:()=>{}},
-    {label:"LogOut", icon:LogoutIcon, action:()=>{}},
-]
+];
+
+const logOutData = {label:"LogOut", icon:LogoutIcon, action:()=>{}};
+
 
 export default function(){
+
+    const logOut = useLogOut();
+    useAuthentication();
+    
     return (
         <Box>
             <BackHeader color="neutral"/>
             <Container sx={{pt:10,pb:1}}>
                 <List component={Paper} disablePadding elevation={4}>
-                    {menuData.map(d=>
+                    {menuData.concat([{...logOutData, action:logOut as unknown as any}]).map(d=>
                         <ListItemButton component={d.path?NextLink:"li"} href={d.path} onClick={d.action} divider key={d.label}>
                             <ListItemIcon>
                                 {<d.icon color="primary"/>}

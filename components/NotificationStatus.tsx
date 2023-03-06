@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from "react";
+import React from "react";
 
 import { Snackbar, Alert, AlertColor } from "@mui/material";
 
@@ -11,8 +11,8 @@ export default ()=>{
     const {status, open, message} = useSelector((state:any)=>state.notifyStatus);
 
     return (
-        <Snackbar autoHideDuration={3000} open={open} onClose={()=>dispatch(close())}>
-            <Alert severity={status as unknown as AlertColor}>
+        <Snackbar anchorOrigin={{vertical:"bottom", horizontal:"center"}} autoHideDuration={4000} open={open} onClose={()=>dispatch(close(null))}>
+            <Alert sx={{flexGrow:1}} severity={status as unknown as AlertColor}>
                 {message}
             </Alert>
         </Snackbar>

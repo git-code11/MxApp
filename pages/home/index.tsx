@@ -16,6 +16,7 @@ import TopHeader from "../../components/TopHeader";
 import Navigation from "../../components/Navigation";
 
 import Item from "../../components/ItemButton";
+import { useAuthentication } from "../../hooks/auth";
 
 
 const DisplaySwapSection = ()=>
@@ -64,6 +65,9 @@ const BannerSection = ()=>
 ;
 
 export default function(){
+
+    useAuthentication();
+
     return (
         <Box>
             <TopHeader/>

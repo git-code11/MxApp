@@ -7,7 +7,7 @@ export const slice = createSlice({
     error: (state, {payload:message}) => ({message, status:"error", open:true}),
     success: (state, {payload:message}) => ({message, status:"success", open:true}),
     info: (state, {payload:message}) => ({message, status:"info", open:true}),
-    close: ()=>({message:"", status:undefined, open:false})
+    close: (state)=>({...state, open:false})
   },
 })
 

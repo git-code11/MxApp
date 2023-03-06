@@ -18,6 +18,7 @@ import * as yup from "yup";
 
 import * as regex_test from "../../components/input_test";
 
+import { useAuthentication, useLogIn } from "../../hooks/auth";
 
 const fields = [
     {name:"email", label:"Email", icon:<UserIcon/>},
@@ -33,7 +34,7 @@ const schema = yup.object({
   
 const LoginForm = ()=>{
 
-    const submit = console.log;
+    const {email:submit} = useLogIn();
 
     return (
         <FormProvider schema={schema}>
@@ -52,6 +53,9 @@ const LoginForm = ()=>{
 
 
 export default function(){
+
+    useAuthentication((d:any)=>!d,'/home');
+
     return(
         <Box sx={{pt:3, pb:3, minHeight:"100vh", backgroundColor:"tertiary.main",".MuiSvgIcon-root":{color:"tertiary.contrastText"}}}>
             <Stack component={Container} spacing={2} justifyContent="space-between">
